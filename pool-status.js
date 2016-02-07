@@ -18,23 +18,25 @@ var poolStatus = function PoolStatus( /*PoolControllerMessage*/ pcm ) {
         spa: spaTemp,
         air: airTemp
       },
-      
+
       time: function() {
         return moment( { hour: hour, minute: minute } ).format( "MM-DD-YYYY hh:mm a" );
       },
-      
+
       toString() {
-      
-        var s = this.poolMode.toString();
-        s += "Air temp is " + this.temperature.air + "\n";
-        s += "Pool temp is " + this.temperature.pool + "\n";
-        s += "Spa temp is " + this.temperature.spa + "\n";
-        s += this.time();
+
+        var s = "Message from: " + pcm.source.name + "\n";
+           s += "Message to:   " + pcm.destination.name + "\n";
+           s += "  " + this.poolMode.toString();
+           s += "  " + "Air temp is " + this.temperature.air + "\n";
+           s += "  " + "Pool temp is " + this.temperature.pool + "\n";
+           s += "  " + "Spa temp is " + this.temperature.spa + "\n";
+           s += "  " + this.time() + "\n";
         return s;
       }
-    
+
     };
-    
+
     return status;
   } else {
     throw new Error("Invalid PoolControllerMessage. It is not a PoolStatus type");

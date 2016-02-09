@@ -1,37 +1,41 @@
+var PoolInfo = require ( "./pool-info.js" );
 
+/**
+* PoolMode is intended to be used to decode the pool mode byte from a PoolStatus message into
+* what is actually on.
+*/
 var poolmode = function PoolMode( /*Hex*/ hexMode ) {
-    
-  var modes = {
-    SPA:          { hex : 0x01, name : "Spa" },
-    POOL_LIGHT:   { hex : 0x02, name : "Pool light" },
-    POOL_LIGHT1:  { hex : 0x04, name : "Pool light 1" },
-    POOL_LIGHT2:  { hex : 0x08, name : "Pool light 2"},
-    SPA_LIGHT:    { hex : 0x10, name : "Spa light"},
-    POOL:         { hex : 0x20, name : "Pool"},
-    WATERFALL:    { hex : 0x40, name : "Waterfall"},
-    AIR_BLOWER:   { hex : 0x80, name : "Air blower"}
-  };
 
   return {
     mode: hexMode,
-    
-    toString: function() {
-      var s = "";
-      for( var key in modes ) {
-        var mode = modes[key];
-        
+
+    getActiveEquipment: function() {
+      var whatsOn = new Array();
+      for( var key in PoolInfo.devices ) {
+        var mode = PoolInfo.devices[key];
+
         if( hexMode & mode.hex ) {
-          s += mode.name + " is on.\n";
+          whatsOn.push( mode );
         }
       }
-      
-      if(!s) {
+      return whatsOn;
+    },
+
+    toString: function() {
+      var s = "";
+      var active = this.getActiveEquipment();
+
+      if ( active.length > 0 ) {
+        for( var i in active ) {
+          var mode = active[i];
+          s += active[i].name + " is on.\n";
+        }
+      } else {
         s = "Everything is off.\n";
       }
-      
       return s;
     }
-    
+
   };
 
 };

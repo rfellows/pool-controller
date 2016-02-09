@@ -13,8 +13,6 @@ var serialPort = new SerialPort( COM,
     dataBits: 8
   }, false );
 
-var preamble = new Buffer( [ 0x00, 0xff, 0xa5 ] );
-
 var processor = {
   messageBuffer: null,
   working: false,
@@ -34,6 +32,7 @@ var processor = {
           } else {
             // don't handle this one yet
             console.log( "Unsupported PoolControllerMessage" );
+            console.log( msg );
             console.log( messageBuffer );
           }
         } else {

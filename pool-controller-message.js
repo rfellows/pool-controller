@@ -3,12 +3,13 @@ var PoolInfo = require( "./pool-info.js" );
 var pcm = {
   name: "PoolControllerMessage",
   preamble: new Buffer( [ 0x00, 0xff, 0xa5 ] ),
+  indexOfTypeByte: 6,
   indexOfDataLengthByte: 7,
   indexOfSourceByte: 5,
   indexOfDestByte: 4,
 
   PoolControllerMessage: function( /*Buffer*/ buffer ) {
-    var source, dest, msgLength, data, checksum, offset, checksumOffset, hour, minute;
+    var source, dest, msgLength, data, checksum, offset, checksumOffset, hour, minute, messageType;
 
     var _detectEquipment = function( id ) {
       var endPoint = { id: id, name: "Unknown" };
@@ -27,6 +28,7 @@ var pcm = {
       source = _detectEquipment( buffer[pcm.indexOfSourceByte] );
       dest = _detectEquipment( buffer[pcm.indexOfDestByte] );
       msgLength = buffer[pcm.indexOfDataLengthByte];
+      messageType = buffer[pcm.indexOfTypeByte];
       offset = 8;
       checksumOffset = offset + msgLength;
 
@@ -73,8 +75,9 @@ var pcm = {
       /**
       * Use this to get a buffer that can be used to write back using the members of the object
       */
-      toBuffer: function() {
-        var bytes = new Buffer( [ 0x01, this.destination.id, this.source.id, 0x86, this.dataBuffer.length & 0xff ] );
+      toBuffer: function( okResponseByte ) {
+        var okByte = okResponseByte ? okResponseByte : 0x86;
+        var bytes = new Buffer( [ 0x01, this.destination.id, this.source.id, okByte, this.dataBuffer.length & 0xff ] );
         var buffNoCheck = Buffer.concat( [ pcm.preamble, bytes, this.dataBuffer ],
           pcm.preamble.length + bytes.length + this.dataBuffer.length );
 
@@ -101,6 +104,9 @@ var pcm = {
         var chk = new Buffer( [ byte1, byte2 ] );
         // console.log( chk );
         return chk;
+      },
+      getMessageType: function() {
+        return messageType;
       }
 
     };

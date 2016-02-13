@@ -51,6 +51,37 @@ var poolAction = function PoolAction( /*EventEmitter*/ monitor ) {
       });
     },
 
+    setSpaTemperature: function( temp, callback ) {
+      temp = temp > PoolInfo.MAX_TEMP ? PoolInfo.MAX_TEMP : temp;
+      var okByte = PoolInfo.messageTypes.HEAT;
+      serialPort.open( function( error ) {
+        if ( error ) {
+          throw new Error( error );
+        } else {
+          var _callback = function( args ) {
+            serialPort.close();
+            monitor.emit( "temperatureSet", temp );
+            if ( callback ) {
+              callback( args );
+            }
+          }
+          // ok to write now
+          var msg = new PoolControllerMessage();
+          msg.source = PoolInfo.endPoints.WALL_UNIT;
+          msg.destination = PoolInfo.endPoints.INTELLI_SENSE;
+          // data buffer for heat menu is
+          // 1 - pool temp
+          // 2 - spa temp setting
+          // 3 - spa heat mode (heater or off)
+          // 4 - pool mode (heater or off)
+          // we never want to heat the pool, so those are going to always be hard coded
+          msg.dataBuffer = new Buffer( [ 0x55, temp, PoolInfo.HEATER, PoolInfo.OFF ] );
+          var sendMsg = msg.toBuffer( okByte );
+          serialPort.write( sendMsg, _callback );
+        }
+      });
+    },
+
     turnOnSpa: function( callback ) {
       this.turnOn( PoolInfo.devices.SPA, callback );
     },

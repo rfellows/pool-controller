@@ -1,6 +1,8 @@
 var poolInfo = {
   ON: 0x01,
   OFF: 0x00,
+  HEATER: 0x04,
+  MAX_TEMP: 0x68,  // 104 degrees
   devices : {
     SPA:          { id : 0x01, hex : 0x01, name : "Spa" },
     POOL_LIGHT:   { id : 0x02, hex : 0x02, name : "Pool light" },
@@ -18,7 +20,11 @@ var poolInfo = {
     INTELLI_SENSE: { id: 0x10, name: "IntelliSense controller" },
     SPA_REMOTE:    { id: null, name: "Spa-side remote" }
   },
-
+  messageTypes: {
+    RESPONSE: 0x01,
+    STATUS: 0x02,
+    HEAT: 0x88
+  },
   getDeviceByName: function( name ) {
     for( key in this.devices ) {
       var device = this.devices[key];

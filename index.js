@@ -36,11 +36,34 @@ PoolController.on( "error", function( error ) {
   console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^");
 } );
 
-// setInterval( function() {
-//   PoolController.getPoolStatus( function status( s ) {
-//     console.log( s.toString() );
-//   } );
-// }, 10000 );
+PoolController.on( "temperatureSet", function( temp ) {
+  console.log( "Set the spa heat to " + temp + " degrees" );
+} );
+
+PoolController.on( "heater", function( result, messageBuffer ) {
+  console.log( "HEATER - " + result );
+  console.log(messageBuffer);
+} );
+PoolController.on( "actionResponse", function( result, messageBuffer ) {
+  console.log( "ACTION RESPONSE - " + result );
+  console.log(messageBuffer);
+} );
+
+PoolController.action.setSpaTemperature( 104 );
+
+setTimeout( function() {
+  PoolController.action.setSpaTemperature( 110 );
+}, 3000 );
+
+setTimeout( function() {
+  PoolController.action.setSpaTemperature( 98 );
+}, 10000 );
+
+setInterval( function() {
+  PoolController.getPoolStatus( function status( s ) {
+    console.log( s.toString() );
+  } );
+}, 10000 );
 
 // PoolController.action.turnOnWaterfall();
 // setTimeout( function() {

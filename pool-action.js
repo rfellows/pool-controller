@@ -1,13 +1,15 @@
 var PoolInfo = require( "./pool-info.js" ),
     serialport = require( "serialport" ),
     pcm = require( "./pool-controller-message.js" ),
-    PoolControllerMessage = pcm.PoolControllerMessage;
+    PoolControllerMessage = pcm.PoolControllerMessage,
+    Random = require("random-js"),
+    random = new Random(Random.engines.mt19937().autoSeed());
 
 /**
 * PoolAction is to be used to create the messages to send to the controll unit
 * to activate/deactivate something ( spa, pool, lights, ... )
 */
-var poolAction = function PoolAction( /*EventEmitter*/ monitor ) {
+var poolAction = function PoolAction( /*EventEmitter*/ eventEmitter ) {
 
   var SerialPort = serialport.SerialPort,
       COM_PORT = "/dev/ttyAMA0",
@@ -15,7 +17,8 @@ var poolAction = function PoolAction( /*EventEmitter*/ monitor ) {
         {
           baudrate: 9600,
           dataBits: 8
-        }, false );
+        }, false ),
+      monitor = eventEmitter;
 
 
   return {
@@ -60,7 +63,9 @@ var poolAction = function PoolAction( /*EventEmitter*/ monitor ) {
         } else {
           var _callback = function( args ) {
             serialPort.close();
-            monitor.emit( "temperatureSet", temp );
+            if ( monitor ) {
+              monitor.emit( "temperatureSet", temp );
+            }
             if ( callback ) {
               callback( args );
             }
@@ -131,6 +136,57 @@ var poolAction = function PoolAction( /*EventEmitter*/ monitor ) {
       this.turnOff( PoolInfo.devices.AIR_BLOWER, callback );
     },
 
+    startLightShow: function() {
+      var that = this;
+      if ( monitor ) {
+        monitor.emit( "lightShow", "on" );
+      }
+      var lightOn = [
+        { isOn: false,
+          device: PoolInfo.devices.POOL_LIGHT
+        },
+        { isOn: false,
+          device: PoolInfo.devices.POOL_LIGHT1
+        },
+        { isOn: false,
+          device: PoolInfo.devices.POOL_LIGHT2
+        }
+      ];
+
+      that.lightShow = setInterval( function() {
+        for( var i = 0; i < 3; i++ ) {
+
+          if ( !lightOn[i].isOn ) {
+            lightOn[i].isOn = true;
+
+            var rnd1 = random.integer(1000, 10000);
+            var rnd2 = random.integer(3000, 10000);
+
+            setTimeout( function( on ) {
+              // console.log("Turning on " + on.device.name);
+              that.turnOn( on.device, function() {
+                // now that it's on, let's turn it off in a bit
+                setTimeout( function ( off ) {
+                  // console.log("Turning off " + off.device.name);
+                  that.turnOff( off.device );
+                  off.isOn = false;
+                }, rnd2, on );
+              } );
+            }, rnd1, lightOn[i] )
+          }
+        }
+      }, 1000 );
+    },
+
+    stopLightShow: function() {
+      clearInterval( this.lightShow );
+      this.turnOffPoolLight();
+      this.turnOffPoolLight1();
+      this.turnOffPoolLight2();
+      if ( monitor ) {
+        monitor.emit( "lightShow", "off" );
+      }
+    }
   };
 
 }

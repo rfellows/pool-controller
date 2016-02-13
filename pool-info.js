@@ -4,14 +4,14 @@ var poolInfo = {
   HEATER: 0x04,
   MAX_TEMP: 0x68,  // 104 degrees
   devices : {
-    SPA:          { id : 0x01, hex : 0x01, name : "Spa" },
-    POOL_LIGHT:   { id : 0x02, hex : 0x02, name : "Pool light" },
-    POOL_LIGHT1:  { id : 0x03, hex : 0x04, name : "Pool light 1" },
-    POOL_LIGHT2:  { id : 0x04, hex : 0x08, name : "Pool light 2"},
-    SPA_LIGHT:    { id : 0x05, hex : 0x10, name : "Spa light"},
-    POOL:         { id : 0x06, hex : 0x20, name : "Pool"},
-    WATERFALL:    { id : 0x07, hex : 0x40, name : "Waterfall"},
-    AIR_BLOWER:   { id : 0x08, hex : 0x80, name : "Air blower"}
+    SPA:           { id : 0x01, hex : 0x01, name : "Spa" },
+    POOL_LIGHT:    { id : 0x02, hex : 0x02, name : "Pool light" },
+    POOL_LIGHT1:   { id : 0x03, hex : 0x04, name : "Pool light 1" },
+    POOL_LIGHT2:   { id : 0x04, hex : 0x08, name : "Pool light 2"},
+    SPA_LIGHT:     { id : 0x05, hex : 0x10, name : "Spa light"},
+    POOL:          { id : 0x06, hex : 0x20, name : "Pool"},
+    WATERFALL:     { id : 0x07, hex : 0x40, name : "Waterfall"},
+    AIR_BLOWER:    { id : 0x08, hex : 0x80, name : "Air blower"}
   },
 
   endPoints : {
@@ -20,11 +20,14 @@ var poolInfo = {
     INTELLI_SENSE: { id: 0x10, name: "IntelliSense controller" },
     SPA_REMOTE:    { id: null, name: "Spa-side remote" }
   },
+
   messageTypes: {
-    RESPONSE: 0x01,
-    STATUS: 0x02,
-    HEAT: 0x88
+    RESPONSE:      { id: 0x01, name: "Response" },
+    STATUS:        { id: 0x02, name: "Status" },
+    HEAT:          { id: 0x88, name: "Heat" },
+    DEVICE_TOGGLE: { id: 0x86, name: "Device toggle" }
   },
+
   getDeviceByName: function( name ) {
     for( key in this.devices ) {
       var device = this.devices[key];
@@ -43,7 +46,28 @@ var poolInfo = {
       }
     }
     return null;
+  },
+
+  getMessageTypeByName: function( name ) {
+    for( key in this.messageTypes ) {
+      var mt = this.messageTypes[key];
+      if ( name.toUpperCase() === mt.name.toUpperCase() ) {
+        return mt;
+      }
+    }
+    return null;
+  },
+
+  getMessageTypeById: function( id ) {
+    for( key in this.messageTypes ) {
+      var mt = this.messageTypes[key];
+      if ( id === mt.id ) {
+        return mt;
+      }
+    }
+    return null;
   }
+
 }
 
 module.exports = poolInfo;

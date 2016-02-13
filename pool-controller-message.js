@@ -28,7 +28,7 @@ var pcm = {
       source = _detectEquipment( buffer[pcm.indexOfSourceByte] );
       dest = _detectEquipment( buffer[pcm.indexOfDestByte] );
       msgLength = buffer[pcm.indexOfDataLengthByte];
-      messageType = buffer[pcm.indexOfTypeByte];
+      messageType = PoolInfo.getMessageTypeById( buffer[pcm.indexOfTypeByte] );
       offset = 8;
       checksumOffset = offset + msgLength;
 

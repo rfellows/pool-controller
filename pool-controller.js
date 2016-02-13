@@ -5,6 +5,7 @@ var PoolMode = require( "./pool-mode.js" ),
     EventEmitter = require("events").EventEmitter,
     PoolAction = require( "./pool-action.js" ),
     PoolInfo = require( "./pool-info.js" ),
+    PoolResponse = require( "./pool-response.js" ),
     util = require("util");
 
 function PoolMonitor() {
@@ -32,6 +33,7 @@ var poolController = function () {
         handleIt: function( messageBuffer ) {
           var msg = new PoolControllerMessage( messageBuffer );
           if ( msg.check() ) {
+            // console.log(messageBuffer);
             if ( msg.dataLength === 0x1d && msg.getMessageType() === PoolInfo.messageTypes.STATUS ) {
               var status = new PoolStatus( msg );
               monitor.emit( "status", status );
@@ -39,7 +41,8 @@ var poolController = function () {
               // we are setting the heat options
               monitor.emit( "heater", "TODO: construct a heater message object and return it here", messageBuffer );
             } else if ( msg.getMessageType() === PoolInfo.messageTypes.RESPONSE ) {
-              monitor.emit( "actionResponse", "TODO: construct a response message object and return it", messageBuffer );
+              var response = new PoolResponse( msg );
+              monitor.emit( "actionResponse", response );
             } else {
               // don't handle this one yet
               var unknown = {
@@ -104,7 +107,7 @@ var poolController = function () {
     on: function( event, callback ) {
       monitor.on( event, callback );
     },
-    once: function() {
+    once: function( event, callback ) {
       monitor.once( event, callback );
     },
     removeListener: function( event, callback ) {

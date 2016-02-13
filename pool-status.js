@@ -1,6 +1,8 @@
-var PoolControllerMessage = require( "./pool-controller-message.js" );
+var poolControllerMessage = require( "./pool-controller-message.js" );
 var moment = require( "moment" );
 var PoolMode = require( "./pool-mode.js" );
+
+var PoolControllerMessage = poolControllerMessage.PoolControllerMessage;
 
 var poolStatus = function PoolStatus( /*PoolControllerMessage*/ pcm ) {
   if ( pcm.check() && pcm.dataLength === 0x1d ) {
@@ -25,13 +27,15 @@ var poolStatus = function PoolStatus( /*PoolControllerMessage*/ pcm ) {
 
       toString() {
 
-        var s = "Message from: " + pcm.source.name + "\n";
+        var s = "=================================================\n";
+           s += "Message from: " + pcm.source.name + "\n";
            s += "Message to:   " + pcm.destination.name + "\n";
-           s += "  " + this.poolMode.toString();
-           s += "  " + "Air temp is " + this.temperature.air + "\n";
-           s += "  " + "Pool temp is " + this.temperature.pool + "\n";
-           s += "  " + "Spa temp is " + this.temperature.spa + "\n";
-           s += "  " + this.time() + "\n";
+           s += this.poolMode.toString();
+           s += "Air temp is " + this.temperature.air + "\n";
+           s += "Pool temp is " + this.temperature.pool + "\n";
+           s += "Spa temp is " + this.temperature.spa + "\n";
+           s += this.time() + "\n";
+           s += "=================================================\n"; 
         return s;
       }
 

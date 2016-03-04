@@ -7,21 +7,14 @@ var PoolInfo = require( "./pool-info.js" );
 * <Buffer 00 ff a5 01 20 10 01 01 88 01 60>
 */
 var response = function PoolResponse( /*PoolControllerMessage*/ pcm ) {
-  var messageType = null;
 
   if ( pcm.check() && pcm.getMessageType() === PoolInfo.messageTypes.RESPONSE ) {
-    messageType = PoolInfo.getMessageTypeById( pcm.dataBuffer[0] );
+    return pcm.dataBuffer[0] === 0x01;
   } else {
     console.log("invalid response buffer");
     console.log(pcm);
     throw new Error( "Invalid PoolResponse buffer" );
   }
-
-  return {
-    poolControllerMessage: pcm,
-    messageType: messageType
-  };
-
 };
-
+  
 module.exports = response;

@@ -76,8 +76,9 @@ var pcm = {
       * Use this to get a buffer that can be used to write back using the members of the object
       */
       toBuffer: function( okResponseByte ) {
-        var okByte = okResponseByte ? okResponseByte : 0x86;
-        var bytes = new Buffer( [ 0x01, this.destination.id, this.source.id, okByte, this.dataBuffer.length & 0xff ] );
+        var okByte = okResponseByte ? okResponseByte : PoolInfo.messageTypes.DEVICE_TOGGLE;
+        console.log("OK BYTE = " + okByte);
+        var bytes = new Buffer( [ 0x01, this.destination.id, this.source.id, okByte.id, this.dataBuffer.length & 0xff ] );
         var buffNoCheck = Buffer.concat( [ pcm.preamble, bytes, this.dataBuffer ],
           pcm.preamble.length + bytes.length + this.dataBuffer.length );
 

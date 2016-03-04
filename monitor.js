@@ -13,6 +13,7 @@ var serialPort = new SerialPort( COM,
   }, false );
 
 
+// let me know when a device turns on/off
 PoolController.on( "deviceOn", function deviceOn( device ) {
   console.log( device.name + " just turned on." );
 } );
@@ -20,14 +21,7 @@ PoolController.on( "deviceOff", function deviceOn( device ) {
   console.log( device.name + " just turned off." );
 } );
 
-PoolController.on( "start message", function( data ) {
-  console.log("<message type='" + data.name + "'>");
-} );
-
-PoolController.on( "end message", function( data ) {
-  console.log("</message type='" + data.name + "'>");
-} );
-
+// let me know when i get a message that i don't recognize
 PoolController.on( "unknown message", function( data ) {
   console.log("~~~~~~~~Unknown~~~~~~~~~~");
   console.log( data.message );
@@ -35,6 +29,7 @@ PoolController.on( "unknown message", function( data ) {
   console.log("~~~~~~~~~~~~~~~~~~~~~~~~~");
 } );
 
+// show me all errors
 PoolController.on( "error", function( error ) {
   console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^");
   console.log("^^^^^^^^Error^^^^^^^^^^^^^");
@@ -45,17 +40,18 @@ PoolController.on( "error", function( error ) {
   console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^");
 } );
 
+// let me know when the temperature setting has changed for the spa
 PoolController.on( "temperatureSet", function( temp ) {
   console.log( "Set the spa heat to " + temp + " degrees" );
 } );
 
-PoolController.on( "heater", function( result, messageBuffer ) {
-  console.log( "HEATER - " + result );
-  console.log(messageBuffer);
+// watch for status events
+PoolController.on( "status", function( response ) {
+  // console.log( response.toString() );
 } );
 
-PoolController.on( "status", function( response ) {
-  console.log( response.toString() );
+PoolController.on( "heatSettings", function( response ) {
+  console.log( response );
 } );
 
 serialPort.open( function( error ) {
@@ -72,32 +68,11 @@ serialPort.open( function( error ) {
     } );
   }
 } );
-
-PoolController.on( "lightShow", function( state ) {
-  console.log( "Light show is " + state );
-} );
-PoolController.action.startLightShow();
+// PoolController.action.setSpaTemperature( 100, function( status ) {
+//   console.log(status);
+// } );
 setTimeout( function() {
-  PoolController.action.stopLightShow();
-}, 60000 );
-
-setInterval( function() {
-  PoolController.getPoolStatus( function status( s ) {
-    console.log( s.toString() );
+  PoolController.getHeatStatus( function( heatSettings ) {
+    console.log( heatSettings );
   } );
-}, 10000 );
-
-// PoolController.action.setSpaTemperature( 104 );
-//
-// setTimeout( function() {
-//   PoolController.action.setSpaTemperature( 110 );
-// }, 3000 );
-// setTimeout( function() {
-//   PoolController.action.setSpaTemperature( 98 );
-// }, 10000 );
-//
-//
-// PoolController.action.turnOnWaterfall();
-// setTimeout( function() {
-//   PoolController.action.turnOffWaterfall();
-// }, 20000 );
+}, 5000 );

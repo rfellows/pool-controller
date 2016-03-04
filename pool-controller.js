@@ -6,23 +6,32 @@ var PoolMode = require( "./pool-mode.js" ),
     PoolAction = require( "./pool-action.js" ),
     PoolInfo = require( "./pool-info.js" ),
     PoolResponse = require( "./pool-response.js" ),
-    util = require("util");
+    HeatSettings = require( "./messages/heat-settings.js" ),
+    util = require("util"),
+    serialport = require( "serialport" ),
+    SerialPort = serialport.SerialPort;
 
 function PoolMonitor() {
   EventEmitter.call( this );
 }
 util.inherits( PoolMonitor, EventEmitter );
 
-
 var poolController = function () {
   var monitor = new PoolMonitor();
   var poolAction = new PoolAction( monitor );
+  var COM = "/dev/ttyAMA0";
+  var serialPort = new SerialPort( COM,
+    {
+      baudrate: 9600,
+      dataBits: 8
+    }, false );
 
   return {
     messageBuffer: null,
     working: false,
     currentMessageType: null,
     action: poolAction,
+    isRunning: false,
     supportedMessageTypes: {
 
       poolControllerMessage: {
@@ -43,6 +52,10 @@ var poolController = function () {
             } else if ( msg.getMessageType() === PoolInfo.messageTypes.RESPONSE ) {
               var response = new PoolResponse( msg );
               monitor.emit( "actionResponse", response );
+            } else if ( msg.getMessageType() == PoolInfo.messageTypes.HEAT_SETTINGS ) {
+              var heatSettings = new HeatSettings( msg );
+              console.log(heatSettings);
+              monitor.emit( "heatSettings", heatSettings );
             } else {
               // don't handle this one yet
               var unknown = {
@@ -118,6 +131,40 @@ var poolController = function () {
       monitor.once( "status", function( /*PoolStatus*/ poolStatus ) {
         callback( poolStatus );
       } );
+    },
+
+    getHeatStatus: function( callback ) {
+      monitor.once( "heatSettings", function( /*HeatSettings*/ heatSettings ) {
+        callback( heatSettings );
+      } );
+      poolAction.asForHeatMenu();
+    },
+
+    // TODO: turn the spa on and monitor until it has reached the desired state
+    // TODO: move other message type files in to the messages folder
+
+    start: function() {
+      this.isRunning = true;
+      var pc = this;
+      serialPort.open( function( error ) {
+
+        if( error ) {
+          console.log( "Failed to open: " + error );
+          pc.isRunning = false;
+        } else {
+          // console.log( "Opened: " + COM );
+          serialPort.on( "data", function( data ) {
+            if( data.length > 1 ) {
+              pc.read( data );
+            }
+          } );
+        }
+      } );
+    },
+
+    stop: function() {
+      serialPort.close();
+      this.isRunning = false;
     }
   }
 }

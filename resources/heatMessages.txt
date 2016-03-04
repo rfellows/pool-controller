@@ -1,0 +1,126 @@
+Open the heat menu
+
+~~~~~~~~Unknown~~~~~~~~~~
+{ source: { id: 32, name: 'Wall unit' },
+  destination: { id: 16, name: 'IntelliSense controller' },
+  dataLength: 1,
+  dataBuffer: <Buffer 00>,
+  checksum: <Buffer 01 9f>,
+  check: [Function],
+  detectEquipment: [Function],
+  toBuffer: [Function],
+  calculateChecksum: [Function],
+  getMessageType: [Function] }
+<Buffer 00 ff a5 01 10 20 c8 01 00 01 9f>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<Buffer 00 ff a5 01 10 20 00 01 00 00 d7>
+
+
+Response, spa is set to 98, pool 85
+~~~~~~~~Unknown~~~~~~~~~~
+{ source: { id: 16, name: 'IntelliSense controller' },
+  destination: { id: 15, name: 'Broadcast' },
+  dataLength: 13,
+  dataBuffer: <Buffer 3a 3a 37 55 62 04 00 00 00 4e 64 04 00>,
+  checksum: <Buffer 02 f6>,
+  check: [Function],
+  detectEquipment: [Function],
+  toBuffer: [Function],
+  calculateChecksum: [Function],
+  getMessageType: [Function] }
+<Buffer 00 ff a5 01 0f 10 08 0d 3a 3a 37 55 62 04 00 00 00 4e 64 04 00 02 f6>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+Menu request, ef must represent the Menu option
+~~~~~~~~Unknown~~~~~~~~~~
+{ source: { id: 32, name: 'Wall unit' },
+  destination: { id: 16, name: 'IntelliSense controller' },
+  dataLength: 1,
+  dataBuffer: <Buffer 10>,
+  checksum: <Buffer 01 d6>,
+  check: [Function],
+  detectEquipment: [Function],
+  toBuffer: [Function],
+  calculateChecksum: [Function] }
+<Buffer 00 ff a5 01 10 20 ef 01 10 01 d6>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Menu response
+~~~~~~~~Unknown~~~~~~~~~~
+{ source: { id: 16, name: 'IntelliSense controller' },
+  destination: { id: 32, name: 'Wall unit' },
+  dataLength: 16,
+  dataBuffer: <Buffer 03 00 00 00 00 00 00 00 00 00 80 00 00 02 bf 79>,
+  checksum: <Buffer 02 d2>,
+  check: [Function],
+  detectEquipment: [Function],
+  toBuffer: [Function],
+  calculateChecksum: [Function] }
+<Buffer 00 ff a5 01 20 10 2f 10 03 00 00 00 00 00 00 00 00 00 80 00 00 02 bf 79 02 d2>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Ask for Heat settings from controller, c8 must represent the Heat Menu option
+~~~~~~~~Unknown~~~~~~~~~~
+{ source: { id: 32, name: 'Wall unit' },
+  destination: { id: 16, name: 'IntelliSense controller' },
+  dataLength: 1,
+  dataBuffer: <Buffer 00>,
+  checksum: <Buffer 01 9f>,
+  check: [Function],
+  detectEquipment: [Function],
+  toBuffer: [Function],
+  calculateChecksum: [Function] }
+<Buffer 00 ff a5 01 10 20 c8 01 00 01 9f>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Response for Heat settings -- 5c is 92, represents what the temp of the spa was set to at the time
+~~~~~~~~Unknown~~~~~~~~~~
+{ source: { id: 16, name: 'IntelliSense controller' },
+  destination: { id: 15, name: 'Broadcast' },
+  dataLength: 13,
+  dataBuffer: <Buffer 38 38 3e 55 5c 04 00 00 00 4e 64 04 00>,
+  checksum: <Buffer 02 f3>,
+  check: [Function],
+  detectEquipment: [Function],
+  toBuffer: [Function],
+  calculateChecksum: [Function] }
+<Buffer 00 ff a5 01 0f 10 08 0d 38 38 3e 55 5c 04 00 00 00 4e 64 04 00 02 f3>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+
+Set spa to 97 degrees
+~~~~~~~~Unknown~~~~~~~~~~
+{ source: { id: 32, name: 'Wall unit' },
+  destination: { id: 16, name: 'IntelliSense controller' },
+  dataLength: 4,
+  dataBuffer: <Buffer 55 61 04 00>,
+  checksum: <Buffer 02 1c>,
+  check: [Function],
+  detectEquipment: [Function],
+  toBuffer: [Function],
+  calculateChecksum: [Function] }
+<Buffer 00 ff a5 01 10 20 88 04 55 61 04 00 02 1c>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+OK response for heat set
+~~~~~~~~Unknown~~~~~~~~~~
+{ source: { id: 16, name: 'IntelliSense controller' },
+  destination: { id: 32, name: 'Wall unit' },
+  dataLength: 1,
+  dataBuffer: <Buffer 88>,
+  checksum: <Buffer 01 60>,
+  check: [Function],
+  detectEquipment: [Function],
+  toBuffer: [Function],
+  calculateChecksum: [Function] }
+<Buffer 00 ff a5 01 20 10 01 01 88 01 60>
+~~~~~~~~~~~~~~~~~~~~~~~~~

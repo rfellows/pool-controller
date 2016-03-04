@@ -25,6 +25,8 @@ var poolInfo = {
     RESPONSE:      { id: 0x01, name: "Response" },
     STATUS:        { id: 0x02, name: "Status" },
     HEAT:          { id: 0x88, name: "Heat" },
+    HEAT_MENU:     { id: 0xc8, name: "Heat Menu" },
+    HEAT_SETTINGS: { id: 0x08, name: "Heat Settings" },
     DEVICE_TOGGLE: { id: 0x86, name: "Device toggle" }
   },
 

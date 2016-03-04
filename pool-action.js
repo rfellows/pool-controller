@@ -59,6 +59,7 @@ var poolAction = function PoolAction( /*EventEmitter*/ eventEmitter ) {
       var okByte = PoolInfo.messageTypes.HEAT;
       serialPort.open( function( error ) {
         if ( error ) {
+          serialPort.close();
           throw new Error( error );
         } else {
           var _callback = function( args ) {
@@ -82,6 +83,32 @@ var poolAction = function PoolAction( /*EventEmitter*/ eventEmitter ) {
           // we never want to heat the pool, so those are going to always be hard coded
           msg.dataBuffer = new Buffer( [ 0x55, temp, PoolInfo.HEATER, PoolInfo.OFF ] );
           var sendMsg = msg.toBuffer( okByte );
+          serialPort.write( sendMsg, _callback );
+        }
+      });
+    },
+
+    asForHeatMenu: function( callback ) {
+      var okByte = PoolInfo.messageTypes.HEAT_MENU;
+      serialPort.open( function( error ) {
+        if ( error ) {
+          serialPort.close();
+          throw new Error( error );
+        } else {
+          var _callback = function( args ) {
+            serialPort.close();
+            console.log("asked for heat menu");
+            if ( callback ) {
+              callback( args );
+            }
+          }
+          // ok to write now
+          var msg = new PoolControllerMessage();
+          msg.source = PoolInfo.endPoints.WALL_UNIT;
+          msg.destination = PoolInfo.endPoints.INTELLI_SENSE;
+          msg.dataBuffer = new Buffer( [ 0x00 ] );
+          var sendMsg = msg.toBuffer( okByte );
+          // console.log(sendMsg);
           serialPort.write( sendMsg, _callback );
         }
       });
@@ -152,30 +179,34 @@ var poolAction = function PoolAction( /*EventEmitter*/ eventEmitter ) {
           device: PoolInfo.devices.POOL_LIGHT2
         }
       ];
+      try {
+        that.lightShow = setInterval( function() {
+          for( var i = 0; i < 3; i++ ) {
 
-      that.lightShow = setInterval( function() {
-        for( var i = 0; i < 3; i++ ) {
+            if ( !lightOn[i].isOn ) {
+              lightOn[i].isOn = true;
 
-          if ( !lightOn[i].isOn ) {
-            lightOn[i].isOn = true;
+              var rnd1 = random.integer(200, 10000);
+              var rnd2 = random.integer(1000, 30000);
 
-            var rnd1 = random.integer(1000, 10000);
-            var rnd2 = random.integer(3000, 10000);
-
-            setTimeout( function( on ) {
-              // console.log("Turning on " + on.device.name);
-              that.turnOn( on.device, function() {
-                // now that it's on, let's turn it off in a bit
-                setTimeout( function ( off ) {
-                  // console.log("Turning off " + off.device.name);
-                  that.turnOff( off.device );
-                  off.isOn = false;
-                }, rnd2, on );
-              } );
-            }, rnd1, lightOn[i] )
+              setTimeout( function( on ) {
+                // console.log("Turning on " + on.device.name);
+                that.turnOn( on.device, function() {
+                  // now that it's on, let's turn it off in a bit
+                  setTimeout( function ( off ) {
+                    // console.log("Turning off " + off.device.name);
+                    that.turnOff( off.device );
+                    off.isOn = false;
+                  }, rnd2, on );
+                } );
+              }, rnd1, lightOn[i] )
+            }
           }
-        }
-      }, 1000 );
+        }, 1000 );
+      } catch ( error ) {
+        console.log( error );
+        this.stopLightShow();
+      }
     },
 
     stopLightShow: function() {

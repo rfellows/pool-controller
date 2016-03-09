@@ -3,6 +3,7 @@ var PoolInfo = require( "./pool-info.js" ),
     pcm = require( "./pool-controller-message.js" ),
     PoolControllerMessage = pcm.PoolControllerMessage,
     Random = require("random-js"),
+    lights = require( "./messages/light-command.js" ),
     random = new Random(Random.engines.mt19937().autoSeed());
 
 /**
@@ -163,61 +164,39 @@ var poolAction = function PoolAction( /*EventEmitter*/ eventEmitter ) {
       this.turnOff( PoolInfo.devices.AIR_BLOWER, callback );
     },
 
-    startLightShow: function() {
-      var that = this;
-      if ( monitor ) {
-        monitor.emit( "lightShow", "on" );
-      }
-      var lightOn = [
-        { isOn: false,
-          device: PoolInfo.devices.POOL_LIGHT
-        },
-        { isOn: false,
-          device: PoolInfo.devices.POOL_LIGHT1
-        },
-        { isOn: false,
-          device: PoolInfo.devices.POOL_LIGHT2
-        }
-      ];
-      try {
-        that.lightShow = setInterval( function() {
-          for( var i = 0; i < 3; i++ ) {
-
-            if ( !lightOn[i].isOn ) {
-              lightOn[i].isOn = true;
-
-              var rnd1 = random.integer(200, 10000);
-              var rnd2 = random.integer(1000, 30000);
-
-              setTimeout( function( on ) {
-                // console.log("Turning on " + on.device.name);
-                that.turnOn( on.device, function() {
-                  // now that it's on, let's turn it off in a bit
-                  setTimeout( function ( off ) {
-                    // console.log("Turning off " + off.device.name);
-                    that.turnOff( off.device );
-                    off.isOn = false;
-                  }, rnd2, on );
-                } );
-              }, rnd1, lightOn[i] )
-            }
-          }
-        }, 1000 );
-      } catch ( error ) {
-        console.log( error );
-        this.stopLightShow();
-      }
+    turnOnColorSwim: function( callback ) {
+      this._sendMessage( lights.getColorSwimMessage, callback, "lights", "colorSwim" );
     },
 
-    stopLightShow: function() {
-      clearInterval( this.lightShow );
-      this.turnOffPoolLight();
-      this.turnOffPoolLight1();
-      this.turnOffPoolLight2();
-      if ( monitor ) {
-        monitor.emit( "lightShow", "off" );
-      }
+    turnOnAllLights: function( callback ) {
+      this._sendMessage( lights.getAllOnMessage, callback, "lights", "allOn" );
+    },
+
+    turnOffAllLights: function( callback ) {
+      this._sendMessage( lights.getAllOffMessage, callback, "lights", "allOff" );
+    },
+
+    _sendMessage: function( messageBuffer, callback, monitorEmitKey, monitorEmitData ) {
+      serialPort.open( function( error ) {
+        if ( error ) {
+          serialPort.close();
+          throw new Error( error );
+        } else {
+          var _callback = function( args ) {
+            serialPort.close();
+            if ( monitor ) {
+              monitor.emit( monitorEmitKey, monitorEmitData );
+            }
+            if ( callback ) {
+              callback( args );
+            }
+          }
+          var sendMsg = messageBuffer();
+          serialPort.write( sendMsg, _callback );
+        }
+      });
     }
+
   };
 
 }

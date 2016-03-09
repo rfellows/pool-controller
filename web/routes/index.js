@@ -63,4 +63,29 @@ router.get( "/temp", function( request, response, next ) {
   } );
 } );
 
+router.put( "/lights/colorSwim", function( request, response, next ) {
+  console.log( "Turning on colorSwim mode" );
+
+  PoolController.action.turnOnColorSwim( function() {
+    response.sendStatus(200);
+  } );
+} );
+
+router.put( "/lights/on", function( request, response, next ) {
+  console.log( "Turning on all lights" );
+
+  PoolController.action.turnOnAllLights( function() {
+    response.sendStatus(200);
+  } );
+} );
+
+router.put( "/lights/off", function( request, response, next ) {
+  console.log( "Turning off all lights" );
+
+  PoolController.action.turnOffAllLights( function() {
+    response.sendStatus(200);
+  } );
+} );
+
+
 module.exports = router;

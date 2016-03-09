@@ -3,6 +3,7 @@ var poolInfo = {
   OFF: 0x00,
   HEATER: 0x04,
   MAX_TEMP: 0x68,  // 104 degrees
+  COLOR_SWIM: 0x90,
   devices : {
     SPA:           { id : 0x01, hex : 0x01, name : "Spa" },
     POOL_LIGHT:    { id : 0x02, hex : 0x02, name : "Pool light" },
@@ -27,7 +28,8 @@ var poolInfo = {
     HEAT:          { id: 0x88, name: "Heat" },
     HEAT_MENU:     { id: 0xc8, name: "Heat Menu" },
     HEAT_SETTINGS: { id: 0x08, name: "Heat Settings" },
-    DEVICE_TOGGLE: { id: 0x86, name: "Device toggle" }
+    DEVICE_TOGGLE: { id: 0x86, name: "Device toggle" },
+    LIGHTS       : { id: 0x60, name: "Lights" }
   },
 
   getDeviceByName: function( name ) {

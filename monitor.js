@@ -71,8 +71,24 @@ serialPort.open( function( error ) {
 // PoolController.action.setSpaTemperature( 100, function( status ) {
 //   console.log(status);
 // } );
-setTimeout( function() {
-  PoolController.getHeatStatus( function( heatSettings ) {
-    console.log( heatSettings );
-  } );
-}, 5000 );
+// setTimeout( function() {
+//   PoolController.getHeatStatus( function( heatSettings ) {
+//     console.log( heatSettings );
+//   } );
+// }, 5000 );
+
+// PoolController.action.turnOnAllLights( function( whatHappened ) {
+//   console.log( whatHappened );
+// } );
+
+// setTimeout( function() {
+//   PoolController.action.turnOnColorSwim( function( whatHappened ) {
+//     console.log( whatHappened );
+//   } );
+// }, 3000 );
+
+// setTimeout( function() {
+//   PoolController.action.turnOffAllLights( function( whatHappened ) {
+//     console.log( whatHappened );
+//   } );
+// }, 20000 );

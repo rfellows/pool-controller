@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var moment = require( "moment" );
 
 var PoolController = require( "../../pool-controller.js" );
 var PoolInfo = require( "../../pool-info.js" );
@@ -87,5 +88,11 @@ router.put( "/lights/off", function( request, response, next ) {
   } );
 } );
 
+router.put( "/clock/sync", function( request, response, next ) {
+  console.log( "Setting the clock to now (" + moment().format("HH:mm ddd MMM D YYYY") + ")" );
+  PoolController.action.syncDateTime( function() {
+    response.sendStatus(200);
+  });
+} );
 
 module.exports = router;

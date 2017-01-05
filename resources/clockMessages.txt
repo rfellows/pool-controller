@@ -1,0 +1,43 @@
+// set clock to 2:39 p, sun 1, jan 2000, daylight savings time = auto, acc off = 0
+
+
+~~~~~~~~Unknown~~~~~~~~~~
+{ source: { id: 32, name: 'Wall unit' },
+  destination: { id: 16, name: 'IntelliSense controller' },
+  dataLength: 8,
+  dataBuffer: <Buffer 0e 27 01 01 01 00 00 01>,
+  checksum: <Buffer 01 9c>,
+  check: [Function],
+  detectEquipment: [Function],
+  toBuffer: [Function],
+  calculateChecksum: [Function],
+  getMessageType: [Function] }
+<Buffer 00 ff a5 01 10 20 85 08 0e 27 01 01 01 00 00 01 01 9c>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<Buffer 00 ff a5 01 10 20 85 09 08 14 31 03 04 00 ef 00 01 02 a8>
+<Buffer 00 ff a5 01 10 20 85 08 14 34 03 04 00 ef 00 01 02 a2>
+
+
+~~~~~~~~Unknown~~~~~~~~~~
+{ source: { id: 32, name: 'Wall unit' },
+  destination: { id: 16, name: 'IntelliSense controller' },
+  dataLength: 8,
+  dataBuffer: <Buffer 0e 27 01 01 01 00 00 01>,
+  checksum: <Buffer 01 9c>,
+  check: [Function],
+  detectEquipment: [Function],
+  toBuffer: [Function],
+  calculateChecksum: [Function],
+  getMessageType: [Function] }
+<Buffer 00 ff a5 01 10 20 85 08 0e 27 01 01 01 00 00 01 01 9c>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+data buffer breakdown
+
+0e = 14 -> 2pm
+27 = 39
+01 = 1 -> Sun -> day of week
+01 = 1 -> day -> day of month number
+01 = 1 -> month
+00 = 0 -> year (since 2000)
+00 = 0
+01 = 1 -> DST auto, 0 is manual

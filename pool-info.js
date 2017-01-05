@@ -29,7 +29,8 @@ var poolInfo = {
     HEAT_MENU:     { id: 0xc8, name: "Heat Menu" },
     HEAT_SETTINGS: { id: 0x08, name: "Heat Settings" },
     DEVICE_TOGGLE: { id: 0x86, name: "Device toggle" },
-    LIGHTS       : { id: 0x60, name: "Lights" }
+    LIGHTS       : { id: 0x60, name: "Lights" },
+    CLOCK        : { id: 0x85, name: "Clock" }
   },
 
   getDeviceByName: function( name ) {

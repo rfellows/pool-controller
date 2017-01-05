@@ -4,6 +4,7 @@ var PoolInfo = require( "./pool-info.js" ),
     PoolControllerMessage = pcm.PoolControllerMessage,
     Random = require("random-js"),
     lights = require( "./messages/light-command.js" ),
+    clock = require( "./messages/clock-command.js" )
     random = new Random(Random.engines.mt19937().autoSeed());
 
 /**
@@ -174,6 +175,10 @@ var poolAction = function PoolAction( /*EventEmitter*/ eventEmitter ) {
 
     turnOffAllLights: function( callback ) {
       this._sendMessage( lights.getAllOffMessage, callback, "lights", "allOff" );
+    },
+
+    syncDateTime: function( callback ) {
+      this._sendMessage( clock.syncDateTime(), callback, "clock", "syncDateTime" );
     },
 
     _sendMessage: function( messageBuffer, callback, monitorEmitKey, monitorEmitData ) {

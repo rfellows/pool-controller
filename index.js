@@ -86,18 +86,3 @@ setInterval( function() {
     console.log( s.toString() );
   } );
 }, 10000 );
-
-// PoolController.action.setSpaTemperature( 104 );
-//
-// setTimeout( function() {
-//   PoolController.action.setSpaTemperature( 110 );
-// }, 3000 );
-// setTimeout( function() {
-//   PoolController.action.setSpaTemperature( 98 );
-// }, 10000 );
-//
-//
-// PoolController.action.turnOnWaterfall();
-// setTimeout( function() {
-//   PoolController.action.turnOffWaterfall();
-// }, 20000 );

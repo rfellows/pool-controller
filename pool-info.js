@@ -33,6 +33,16 @@ var poolInfo = {
     CLOCK        : { id: 0x85, name: "Clock" }
   },
 
+  dayOfWeek: [
+    { hex: 0x01, name: "Sunday" },
+    { hex: 0x02, name: "Monday" },
+    { hex: 0x04, name: "Tuesday" },
+    { hex: 0x08, name: "Wednesday" },
+    { hex: 0x10, name: "Thursday" },
+    { hex: 0x20, name: "Friday" },
+    { hex: 0x40, name: "Saturday" },
+  ], 
+
   getDeviceByName: function( name ) {
     for( key in this.devices ) {
       var device = this.devices[key];

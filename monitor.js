@@ -107,3 +107,8 @@ serialPort.open( function( error ) {
 //     console.log( whatHappened );
 //   } );
 // }, 20000 );
+setTimeout( function() {
+  PoolController.action.syncDateTime( function(result) {
+    console.log(result);
+  } );
+}, 5000);

@@ -20,6 +20,8 @@ var poolStatus = function PoolStatus( /*PoolControllerMessage*/ pcm ) {
         spa: spaTemp,
         air: airTemp
       },
+      hour: hour,
+      minute: minute,
 
       time: function() {
         return moment( { hour: hour, minute: minute } ).format( "MM-DD-YYYY hh:mm a" );

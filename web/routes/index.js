@@ -14,9 +14,15 @@ router.get("/status", function status( request, response, next ) {
   if ( !PoolController.isRunning ) {
     PoolController.start();
   }
+  var nowHour = moment().hours();
+  var nowMinutes = moment().minutes();
   PoolController.getPoolStatus( function( status ) {
     status.date = status.time();
     status.activeDevices = status.poolMode.getActiveEquipment();
+    // if the current time isn't the same as the reported time, call the syncDateTime method
+    if ( status.hour != nowHour || status.minute != nowMinutes ) {
+      resetDateTime();
+    }
     response.send( status );
     PoolController.stop();
   } );
@@ -89,10 +95,16 @@ router.put( "/lights/off", function( request, response, next ) {
 } );
 
 router.put( "/clock/sync", function( request, response, next ) {
+  resetDateTime(response);
+} );
+
+var resetDateTime = function(response) {
   console.log( "Setting the clock to now (" + moment().format("HH:mm ddd MMM D YYYY") + ")" );
   PoolController.action.syncDateTime( function() {
-    response.sendStatus(200);
+    if (response) {
+      response.sendStatus(200);
+    }
   });
-} );
+};
 
 module.exports = router;

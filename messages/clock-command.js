@@ -23,21 +23,23 @@ var clockCommand = function() {
 
   return {
     syncDateTime: function() {
+      var now = moment();
+      var dayOfWeek = now.day();
+      
       console.log( "Setting the clock to now (" + moment().format("HH:mm ddd MMM D YYYY") + ")" );
-      console.log("hours " + moment().hours());
-      console.log("minutes " + moment().minutes());
-      console.log("day " + moment().day() + 1);
-      console.log("date " + moment().date() + 1);
-      console.log("month " + moment().month() + 1);
-      console.log("year " + (2000 - moment().year() ));
+      console.log("hours " + now.hours());
+      console.log("minutes " + now.minutes());
+      console.log("day " + dayOfWeek );
+      console.log("date " + now.date());
+      console.log("month " + (now.month() + 1));
+      console.log("year " + (now.year()-2000) );
 
-
-      return buildClockMessage( moment().hours(),
-        moment().minutes(),
-        moment().day() + 1,
-        moment().date() + 1,
-        moment().month() + 1,
-        2000 - moment().year());
+      return buildClockMessage( now.hours(),
+        now.minutes(),
+        PoolInfo.dayOfWeek[dayOfWeek].hex,
+        now.date(),
+        ( now.month() + 1 ),
+        ( now.year() - 2000 ) );
     },
   };
 

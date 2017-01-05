@@ -178,7 +178,7 @@ var poolAction = function PoolAction( /*EventEmitter*/ eventEmitter ) {
     },
 
     syncDateTime: function( callback ) {
-      this._sendMessage( clock.syncDateTime(), callback, "clock", "syncDateTime" );
+      this._sendMessage( clock.syncDateTime, callback, "clock", "syncDateTime" );
     },
 
     _sendMessage: function( messageBuffer, callback, monitorEmitKey, monitorEmitData ) {

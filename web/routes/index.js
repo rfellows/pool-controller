@@ -98,6 +98,10 @@ router.put( "/clock/sync", function( request, response, next ) {
   resetDateTime(response);
 } );
 
+router.get( "/health", function( request, response, next ) {
+  response.sendStatus( 200 );
+} );
+
 var resetDateTime = function(response) {
   console.log( "Setting the clock to now (" + moment().format("HH:mm ddd MMM D YYYY") + ")" );
   PoolController.action.syncDateTime( function() {

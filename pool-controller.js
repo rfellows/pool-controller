@@ -42,7 +42,7 @@ var poolController = function () {
         handleIt: function( messageBuffer ) {
           var msg = new PoolControllerMessage( messageBuffer );
           if ( msg.check() ) {
-            // console.log(messageBuffer);
+            console.log(messageBuffer);
             if ( msg.dataLength === 0x1d && msg.getMessageType() === PoolInfo.messageTypes.STATUS ) {
               var status = new PoolStatus( msg );
               monitor.emit( "status", status );

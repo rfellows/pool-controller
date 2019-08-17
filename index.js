@@ -76,10 +76,10 @@ serialPort.open( function( error ) {
 PoolController.on( "lightShow", function( state ) {
   console.log( "Light show is " + state );
 } );
-PoolController.action.startLightShow();
-setTimeout( function() {
-  PoolController.action.stopLightShow();
-}, 60000 );
+//PoolController.action.startLightShow();
+//setTimeout( function() {
+//  PoolController.action.stopLightShow();
+//}, 60000 );
 
 setInterval( function() {
   PoolController.getPoolStatus( function status( s ) {

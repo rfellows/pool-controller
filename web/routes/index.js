@@ -99,7 +99,8 @@ router.put( "/clock/sync", function( request, response, next ) {
 } );
 
 router.get( "/health", function( request, response, next ) {
-  response.sendStatus( 200 );
+  var health = { "status": "on" }
+  response.send( health );
 } );
 
 var resetDateTime = function(response) {

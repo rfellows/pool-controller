@@ -4,7 +4,10 @@ var PoolMode = require( "./pool-mode.js" );
 
 var PoolControllerMessage = poolControllerMessage.PoolControllerMessage;
 
+// dataBuffer: <Buffer 0c 0b 20 00 00 00 00 00 00 20 00 00 00 00 47 47 00 00 45 00 00 00 04 04 00 7f 60 01 02>,
+
 var poolStatus = function PoolStatus( /*PoolControllerMessage*/ pcm ) {
+//  console.log(pcm);
   if ( pcm.check() && pcm.dataLength === 0x1d ) {
     var hour = pcm.dataBuffer[0];
     var minute = pcm.dataBuffer[1];
@@ -42,7 +45,7 @@ var poolStatus = function PoolStatus( /*PoolControllerMessage*/ pcm ) {
       }
 
     };
-
+    //console.log('status', status);
     return status;
   } else {
     throw new Error("Invalid PoolControllerMessage. It is not a PoolStatus type");
